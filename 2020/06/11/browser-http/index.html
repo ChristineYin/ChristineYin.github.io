@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.0.1" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.0.1" type="image/png" sizes="32x32"><meta name="description" content="HTTP 协议在我们的生活中随处可见，打开手机或者电脑，只要你上网，不论是用安卓机还是 ios、不管是 Mac 还是 Windows、不论是浏览器还是 APP、不论是网上冲浪、刷抖音玩快手亦或是玩游戏，都离不开 HTTP，它一直在为你默默服务。它为什么能做到这些？最终又是怎么行成现在的样子。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP 的进化史">
+<meta property="og:url" content="http://yoursite.com/2020/06/11/browser-http/index.html">
+<meta property="og:site_name" content="橙子">
+<meta property="og:description" content="HTTP 协议在我们的生活中随处可见，打开手机或者电脑，只要你上网，不论是用安卓机还是 ios、不管是 Mac 还是 Windows、不论是浏览器还是 APP、不论是网上冲浪、刷抖音玩快手亦或是玩游戏，都离不开 HTTP，它一直在为你默默服务。它为什么能做到这些？最终又是怎么行成现在的样子。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-11T15:36:42.000Z">
+<meta property="article:modified_time" content="2021-03-03T04:38:03.332Z">
+<meta property="article:author" content="Christine Yin">
+<meta property="article:tag" content="http">
+<meta name="twitter:card" content="summary"><meta name="keywords" content="Christine Yin, 橙子"><meta name="description" content=""><title>HTTP 的进化史 | 橙子</title><link ref="canonical" href="http://yoursite.com/2020/06/11/browser-http/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.0.1"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"dark","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">橙子</div><div class="header-banner-info__subtitle"></div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">HTTP 的进化史</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2020-06-11</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-03-03</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4.3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">23分</span></span></div></header><div class="post-body"><p>当我们看新闻查资料的时候，你知道内容是怎么呈现出来的吗？当你在搜索框输入内容的时候，应用会从服务器端获取我们想要的信息，然后并显示出来。在这个过程中，我们或者说应用扮演的就是客户端的角色，被请求的另一端称为服务器端，它们两者之间采用的就是这个名为 HTTP（HyperText Transfer Protocal，超文本传输协议） 的协议作为通信规范，相互之间按照 HTTP 协议制定的格式发送数据。</p>
+
+        <h2 id="HTTP-0-9"   >
+          <a href="#HTTP-0-9" class="heading-link"><i class="fas fa-link"></i></a>HTTP/0.9</h2>
+      <p>在互联网初期，整个网络世界比较简单，任职于欧洲核子研究中心(CERN)的蒂姆·伯纳斯 - 李(Tim Berners-Lee) 觉得如果能让相隔很远的人可以相互之间共享知识就好了，所以就提出了一个设想，借助多文档之间相互关联行成的超文本，连成可相互参阅的 WWW (World Wide Web，万维网)，也就是我们现在所说的 Web。并且提出了三项构建的技术：</p>
+<ul>
+<li>URI，即统一资源标识符，作为互联网上资源的唯一身份；</li>
+<li>HTML，即超文本标记语言，描述超文本文档；</li>
+<li>HTTP，即超文本传输协议，用来传输超文本；</li>
+</ul>
+<p>对于当时的网络上共享的绝大数资源都是纯文本，所以第一版的 HTTP 协议也采用的纯文本格式，并且设想系统中的文档都是只读的，所以只设计了 GET 请求从服务器上获取 HTML 文档。同时因为需要传输的资源并不多，在服务器返回响应之后立即关闭 TCP 连接。当时的 HTTP 协议有这几个特点：</p>
+<ul>
+<li>只有 GET 请求且只有请求行，并没有请求投请求体；</li>
+<li>服务器也没有响应头信息，只简单的返回数据；</li>
+<li>因为都是 HTML 格式的文件，所以返回的内容是以 ASCII 字符流的形式传输的。</li>
+</ul>
+<p>然后我们看一下 HTTP/0.9 的一个请求过程：</p>
+<ul>
+<li>因为 HTTP 基于 TCP/IP 协议的，所以客户端需要先通过 TCP 的三次握手和服务器建立 TCP 连接；</li>
+<li>建立好连接之后，会发送一个 HTTP 的 GET 请求行信息，如 <code>GET /index.html</code> 用来获取资源；</li>
+<li>服务器收接受到请求之后，根据请求路径找到对应的 HTML 资源文件，并将数据以 ASCII 字符流的形式返回给客户端；</li>
+<li>服务器端发送完毕后，即马上四次挥手断开 TCP 连接。</li>
+</ul>
+
+        <h2 id="HTTP-1-0"   >
+          <a href="#HTTP-1-0" class="heading-link"><i class="fas fa-link"></i></a>HTTP/1.0</h2>
+      <p>随着技术的发展，计算机多媒体技术也有很大的进步，慢慢又出现了图片、音频、视频，还有 JavaScript、CSS 等不同类型的文件，但是 HTTP/0.9 显然不能满足新的需要，所以为了支持多媒体技术，增加了请求头和响应头用来进行协商，做了一些改进，比如：</p>
+<p><strong>多类型文件</strong></p>
+<p>为了支持多种类型文件的解析，做针对性的处理，增加了请求头字段 <code>accept</code> 用来设置，用来告诉服务器希望接收的文件类型。每种文件的编码形式也可能不一样，为了能准确的读取文件，增加了请求头字段 <code>accept-Charset</code> 设置编码类型，响应头字段 <code>content-type</code> 的返回信息将两者合并了。</p>
+<p><strong>压缩</strong><br>由于应用的复杂化，所以文件数量越来越多、文件体积越来越大，为了减轻传输性能，所以让服务器对数据进行压缩之后再进行传输，增加了请求头字段 <code>accept-encoding</code> 用来设置可接收的压缩类型，服务器也增加了相应的响应头字段 <code>content-encoding</code>。同时为了减轻服务端的压力，也引入了 <code>Cache</code> 机制，用来缓存已经下载过的数据。</p>
+<p><strong>状态码</strong></p>
+<p>对于服务器来说，有些请求可能处理不了或者处理出现了问题，这时候就需要和浏览器同步信息，所以引入了状态码，用来标记可能出现的错误原因。</p>
+<p><strong>请求方法</strong></p>
+<p>增加了 <code>HEAD、POST</code> 等新的请求方法。</p>
+<p><strong>国际化</strong></p>
+<p>另外，因为互联网是全球范围的，所以还需要提供国际化支持，服务器对不用地区提供不能的版本，所以还需要浏览器向服务器提供所需的语言版本，增加了请求头 <code>accept-language</code>。</p>
+<p>……</p>
+<p>HTTP/1.0 做了很多完善，形式上基本和我们现在使用的 HTTP 差别不大。但它并没有实际的约束力，只是一份参考文档。因为各个浏览器厂商都在按照自己的意愿设计进行激烈的竞争，对于当时的互联网并没有太大的意义。</p>
+
+        <h2 id="HTTP-1-1"   >
+          <a href="#HTTP-1-1" class="heading-link"><i class="fas fa-link"></i></a>HTTP/1.1</h2>
+      <p>1995 年，网景 Netscape Navigator 和微软的 Internet Explorer 开展了著名的”浏览器大战”，都希望占据主导地位，为此两家公司对于 Web 标准化都视而不见，都各自对 HTML 做了一些扩展，于是导致开发者在写页面的时候，必须考虑兼容他们两家的浏览器。时至今日，这个问题仍然存在，平时开发中仍然需要做到兼容各种浏览器。结果大家都知道，最后微软赢得胜利。这次大战极大的推动了 Web 的发展，在”浏览器大战”结束之后的 1999 年，HTTP 1.1 发布了 RFC 文档，成为一份正式的标准，这意味着以后只要用到了 HTTP 协议，就必须严格遵守这个标准。</p>
+<p>经过后来几年的实践，HTTP/1.1 在 HTTP/1.0 的基础上更完善了，主要的变更点有：</p>
+<p><strong>持久连接</strong><br>HTTP/1.0 每进行一次通信，都要经过三个阶段：建立 TCP 连接、HTTP 请求和响应数据、断开 TCP 连接。随着浏览器的普及，页面图片文件增多，引用文件增多，一个页面可能达到几百个外部引用资源文件，基于这种情况，如果再下载的时候还是每次都需要建立 TCP 连接，就会增加很多无用的开销。所以为了解决这个问题，HTTP/1.1 增加了持久连接的方法，允许在一个 TCP 连接上传输多个 HTTP 请求和响应，只要浏览器和服务器没有明确要断开，那么这个连接就会一直保持。但是下一个 HTTP 请求只能等到上一个 HTTP 响应到达客户端才能发送，如果上一个 HTTP 一直没有响应，那么后续的 HTTP 请求就会一直等待。</p>
+<p>持久连接在 HTTP/1.1 中是默认开启的，如果你想取消持久连接，可以在请求头中加上 <code>Connection: close</code>。目前浏览器中对于同一个域名，默认允许建立 6 个 TCP 连接，即可以并发连接。在开发过程中为了加快展示速度，会分成多个域名，这样并发的请求就可以更多，也称为域名分片。</p>
+<p><strong>增加 Host 头</strong><br>在 HTTP/1.0 中，每个域名绑定了一个唯一的 IP 地址，因此一个服务器只能支持一个域名。但是随着虚拟主机的技术发展，需要实现在一台物理主机上绑定多个虚拟主机，每个虚拟主机都有自己单独的域名，但是这些单独的域名共用同一个 IP 地址。因此，HTTP/1.1 的请求头中增加了 Host 字段，用来表示当前的域名地址，这样服务器就可以根据不同的 Host 值做不同的处理。</p>
+<p><strong>响应数据分块</strong><br>在设计 HTTP/1.0 时，需要在响应头中设置完整的数据大小，比如 Content-Length: 100，这样浏览器就可以根据设置的数据大小来接收数据。但是随着服务器的技术发展，很多页面的内容都是动态生成的，因此在传输数据之前并不知道最终大小是多少，浏览器也不知道什么时候能接收完。所以 HTTP/1.1 通过引入 <code>Chunk transfer</code> 机制来解决这个问题，服务器会将数据分割何曾若干大小的块，每个数据块发送时附上上个数据块的长度，最后使用一个零长度的块作为发送完成的标志。</p>
+<p><strong>Cookie</strong><br>HTTP 是无状态的协议，它对于之前发生过的请求和响应状态不会记录，所以无法根据之前的状态对当次请求进行处理。这也就导致了，在登录过的应用中，每次跳转新的页面还需要重新登录或者每次在请求报文中附加参数。对于无状态的特点，其实也是 HTTP 协议的一个优点，它可以减少服务器的压力和内存资源的消耗，但是又要解决一些特定场景需要状态的问题，所以引入的 Cookie 技术。</p>
+<p>Cookie 会根据从服务器端返回的响应报文中的 <code>Set-Cookie</code> 字段，在客户端设置相应的 Cookie。当下次客户端再往该服务器发送请求时，就会自动在请求报文中加入 <code>Cookie</code> 后发送出去，服务器发现客户端携带了 <code>Cookie</code> 后，会去对比之间的记录，检查究竟是从哪个客户端发过来的，最后得到之间的状态信息。</p>
+
+        <h2 id="HTTP-2"   >
+          <a href="#HTTP-2" class="heading-link"><i class="fas fa-link"></i></a>HTTP/2</h2>
+      <p>HTTP/1.1 发布之后十多年，整个互联网直接发展迅猛，各种网站层出不穷，内容也是更加复杂，这就导致人们对 HTTP 有些不满，主要是速度慢，尽管如此 HTTP/1.1 依然停滞不前没有任何改变。于是 Google 就开发了自己的浏览器 Chrome，然后推出了新的 SPDY 协议，在性能方面做了很多优化，缩短了页面加载时间，并应用于 Chrome 中。随着 Chrome 的市场占用率越来越高，互联网标准化组织以 SPDY 为基础开始指定新版本的 HTTP 协议，最终在 2015 年发布了 HTTP/2。</p>
+<p>我们先来看一下在 HTTP/1.1 中存在那些问题：</p>
+<ol>
+<li>队头阻塞。在 HTTP/1.1 中使用持久连接时，虽然能共用一个 TCP 连接，但是在一个连接的同一时刻只能处理一个请求，在当前请求没有结束之前，其他请求只能处于阻塞状态，在等待的过程中带宽、CPU 都白白浪费了。</li>
+<li>为了加快速度，HTTP/1.1 采用了并发开启多个 TCP 连接，但是我们知道 TCP 存在连接耗时、慢启动等问题，所以成本太高；</li>
+<li>请求只能从客户端开始，在一些要求实时性的应用中，只能通过轮询的手段不断去服务器发送请求，观测是否有了新的数据，如果有的话返回回来，这样做会浪费很多客户端的资源。</li>
+<li>请求/响应首部未压缩，当请求比较少的，首部有没有压缩影响并不明显，但当请求非常多比如几百个，这个时候每次请求都携带首部信息，就会造成更多的延迟时间的浪费。</li>
+</ol>
+<p>这些问题都会增加页面的展示时间，给用户不好体验，所以为了减少网络延迟，提升 Web 的性能，还需要做更多的优化工作，所以接下来我们就来看一下 HTTP/2 是采用什么方式解决的。</p>
+
+        <h3 id="多路复用"   >
+          <a href="#多路复用" class="heading-link"><i class="fas fa-link"></i></a>多路复用</h3>
+      <p>虽然 TCP 有慢启动和竞争带宽的问题，但由于是 TCP 本身的机制导致的，不能改变，只能想办法规避。基于此，HTTP/2 的思路就是一个域名只使用一个 TCP 长连接来传输数据，这样在整个页面资源的下载过程中只需要一次慢启动，同时也避免了多个 TCP 连接竞争带宽的问题。另外，它也实现了并行请求，任何时候都可以将请求发送给服务器，而不需要等待上一下请求完成，服务器也可以随时返回处理好的请求资源，很好解决了队头阻塞的问题。</p>
+<p>那么 HTTP/2 是如何实现的呢？关键就是它在应用层 HTTP 和 传输层 TCP 之间增加了一个二进制分帧层。</p>
+<p>HTTP/1.1 版的头信息肯定是 ASCII 编码的文本，数据体中可以是文本，也可以是二进制。但 HTTP/2 则是一个彻底的二进制协议，头信息和数据体都是二进制，并且统称为”帧”：Headers 帧 和 DATA 帧。分帧之后，便将一个完整的 HTTP 报文进行切分传输，这些帧之间不存在等待关系，也就解决了队头阻塞的问题。</p>
+<p>因为 HTTP/2 中的数据包都不是按顺序发送的，同一个 TCP 连接里面连续的数据包，可能不属于同一请求或响应。所以就需要对数据包进行标记来区分，所以 HTTP/2 就将同一个请求和响应的所有数据包，称为一个数据流。每个数据流都有独一无二的编号，数据包发送的时候，都必须标记数据流 ID，用来区分它属于哪个数据流。接收端将 Stream ID 相同的数据帧再组装成完整的请求报文或响应报文。因为在同一个 TCP 连接上可以进行多个数据帧的通信，也就是多路复用。</p>
+<p>以一个普通的 HTTP 请求-响应为例，它的过程如下：</p>
+<!-- 1. 最开始客户端和服务器端都是空闲的状态，当客户端发送 `Header 帧` 时，分配 `Stream ID`，此时客户端的流打开，服务端接收到数据时，也打开自己的流，这样两端的流都打开了，就可以互相传递数据帧和控制帧；
+2. 当客户端发送完毕，需要关闭时，就想服务端发送 `END_SREAM 帧`，进入半关闭状态，这时候客户端只能接收数据，而不能发送数据；
+3. 服务端收到这个 `END_SREAM 帧`后也进入半关闭状态，此时服务端只能发送数据，不能接收数据。等到服务端也发送完毕后，同样向客户端发送`END_STRAM 帧`，双方进入关闭状态。
+4. 如果下次要开启新的流，流 ID 加 1，直到上限为止。到达上限之后开启一个新的 TCP 连接重新开始计数。 -->
+
+<ul>
+<li>首先，浏览器准备好请求数据，包括了请求行、请求头等信息，如果是 POST 方法，那么还要有请求体。</li>
+<li>这些数据经过二进制分帧层处理之后，会被转换为一个个带有请求 ID 编号的帧，通过协议栈将这些帧发送给服务器。</li>
+<li>服务器接收到所有帧之后，会将所有相同 ID 的帧合并为一条完整的请求信息。</li>
+<li>然后服务器处理该条请求，并将处理的响应行、响应头和响应体分别发送至二进制分帧层。</li>
+<li>同样，二进制分帧层会将这些响应数据转换为一个个带有请求 ID 编号的帧，经过协议栈发送给浏览器。</li>
+<li>浏览器接收到响应帧之后，会根据 ID 编号将帧的数据提交给对应的请求。</li>
+</ul>
+
+        <h3 id="请求的优先级"   >
+          <a href="#请求的优先级" class="heading-link"><i class="fas fa-link"></i></a>请求的优先级</h3>
+      <p>我们知道浏览器中有些数据是非常重要的，但是在发送请求时，重要的请求可能会晚于那些不怎么重要的请求，如果服务器按照请求的顺序来回复数据，那么这个重要的数据就有可能推迟很久才能送达浏览器，这对于用户体验来说是非常不友好的。</p>
+<p>为了解决这个问题，HTTP/2 提供了请求优先级，可以在发送请求时，标上该请求的优先级，这样服务器接收到请求之后，会优先处理优先级高的请求。</p>
+
+        <h3 id="服务器推送"   >
+          <a href="#服务器推送" class="heading-link"><i class="fas fa-link"></i></a>服务器推送</h3>
+      <p>除了设置请求的优先级外，HTTP/2 还可以直接将数据提前推送到浏览器。你可以想象这样一个场景，当用户请求一个 HTML 页面之后，服务器知道该 HTML 页面会引用几个重要的 JavaScript 文件和 CSS 文件，那么在接收到 HTML 请求之后，附带将要使用的 CSS 文件和 JavaScript 文件一并发送给浏览器，这样当浏览器解析完 HTML 文件之后，就能直接拿到需要的 CSS 文件和 JavaScript 文件，这对首次打开页面的速度起到了至关重要的作用。</p>
+
+        <h3 id="头部压缩"   >
+          <a href="#头部压缩" class="heading-link"><i class="fas fa-link"></i></a>头部压缩</h3>
+      <p>无论是 HTTP/1.1 还是 HTTP/2，它们都有请求头和响应头，这是浏览器和服务器的通信语言。HTTP/2 对请求头和响应头进行了压缩，如果只有一个 HTTP 的头文件可能没有多大，压不压缩可能关系不大，但你这样想一下，在浏览器发送请求的时候，基本上都是发送 HTTP 请求头，很少有请求体的发送，通常情况下页面也有 100 个左右的资源，如果将这 100 个请求头的数据压缩为原来的 20%，那么传输效率肯定能得到大幅提升。</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yoursite.com">Christine Yin</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yoursite.com/2020/06/11/browser-http/">http://yoursite.com/2020/06/11/browser-http/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/http/">http</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2020/06/12/browser-http-field/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">说说 HTTP 的首部那些字段</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2020/06/11/browser-crossdomain-4/"><span class="paginator-prev__text">浏览器为什么要设置跨域</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-0-9"><span class="toc-number">1.</span> <span class="toc-text">
+          HTTP&#x2F;0.9</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-0"><span class="toc-number">2.</span> <span class="toc-text">
+          HTTP&#x2F;1.0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-1-1"><span class="toc-number">3.</span> <span class="toc-text">
+          HTTP&#x2F;1.1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-2"><span class="toc-number">4.</span> <span class="toc-text">
+          HTTP&#x2F;2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多路复用"><span class="toc-number">4.1.</span> <span class="toc-text">
+          多路复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#请求的优先级"><span class="toc-number">4.2.</span> <span class="toc-text">
+          请求的优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#服务器推送"><span class="toc-number">4.3.</span> <span class="toc-text">
+          服务器推送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#头部压缩"><span class="toc-number">4.4.</span> <span class="toc-text">
+          头部压缩</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://www.zhideedu.com/UploadFiles/img_3_3865507487_3939955310_26.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Write code and Love life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://weibo.com/" target="_blank" rel="noopener" data-popover="微博" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weibo"></i></span></a><a class="sidebar-ov-social-item" href="yournumber" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">45</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">17</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">56</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Christine Yin</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v4.2.1</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.0.1</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="200" alpha="0.6" zIndex="-1"></script><script src="/js/utils.js?v=2.0.1"></script><script src="/js/stun-boot.js?v=2.0.1"></script><script src="/js/scroll.js?v=2.0.1"></script><script src="/js/header.js?v=2.0.1"></script><script src="/js/sidebar.js?v=2.0.1"></script></body></html>

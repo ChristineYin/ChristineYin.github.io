@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.0.1" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.0.1" type="image/png" sizes="32x32"><meta name="description" content="页面的渲染过程是个复杂且有序的过程，这篇文章是我对于这块知识的一个系统梳理和总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="页面的渲染过程">
+<meta property="og:url" content="http://yoursite.com/2020/06/08/browser-render-5/index.html">
+<meta property="og:site_name" content="橙子">
+<meta property="og:description" content="页面的渲染过程是个复杂且有序的过程，这篇文章是我对于这块知识的一个系统梳理和总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/08/tfTw0s.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/08/tfO8ts.png">
+<meta property="article:published_time" content="2020-06-08T15:49:16.000Z">
+<meta property="article:modified_time" content="2021-03-03T04:38:03.332Z">
+<meta property="article:author" content="Christine Yin">
+<meta property="article:tag" content="浏览器">
+<meta property="article:tag" content="渲染">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/06/08/tfTw0s.jpg"><meta name="keywords" content="Christine Yin, 橙子"><meta name="description" content=""><title>页面的渲染过程 | 橙子</title><link ref="canonical" href="http://yoursite.com/2020/06/08/browser-render-5/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.0.1"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"dark","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">橙子</div><div class="header-banner-info__subtitle"></div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">页面的渲染过程</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2020-06-08</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-03-03</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">3k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">16分</span></span></div></header><div class="post-body"><p>我们在具体了解页面的渲染流程之前，先来对浏览器架构有个基本的认识。</p>
+
+        <h2 id="浏览器架构"   >
+          <a href="#浏览器架构" class="heading-link"><i class="fas fa-link"></i></a>浏览器架构</h2>
+      <p>在最初浏览器设计出来的时候，它其实是单进程的结构，包括了页面线程、网络线程以及其他线程，页面线程主要负责页面的渲染、JS 的运行、插件等。但基于这种架构的设计非常不稳定，也不流畅，因为如果一个插件出了问题就会导致整个浏览器崩溃，而且也因为一个页面线程负责了很多内容，所以模块的执行需要按需进行，容易导致阻塞、浏览器卡顿，用户体验不佳。</p>
+<p>后来经过一系列的优化改进，有了现在的这种浏览器多进程架构，最新的 Chrome 浏览器包括：1 个浏览器主进程、1 个 GPU 进程、1 个网络进程、多个渲染进程、多个插件进程。</p>
+<ol>
+<li><strong>浏览器主进程(Browser Process)</strong>：主要负责界面显示、用户交互、子进程管理，同时提供存储等功能；</li>
+<li><strong>渲染进程(Render Process)</strong>：核心任务是将 HTML、CSS 和 JavaScript 转换为用户可以与之交互的网页，排版引擎 Blink 和 JavaScript 引擎 V8 都是运行在该进程中，默认情况下，Chrome 会为每个 Tab 标签创建一个渲染进程。出于安全考虑，渲染进程都是运行在沙箱模式下；</li>
+<li><strong>GPU 进程(GPU Process)</strong>：其实，Chrome 刚开始发布的时候是没有 GPU 进程的。而 GPU 的使用初衷是为了实现 3D CSS 的效果，只是随后网页、Chrome 的 UI 页面都采用 GPU 来绘制，这使得 GPU 成为浏览器普遍的需求。最后，Chrome 在其多进程架构上也引入了 GPU 进程；</li>
+<li><strong>网络进程(Network Process)</strong>：主要负责页面的网络资源加载，之前是作为一个模块运行在浏览器进程里面的，直到最近才独立出来，成为一个单独的进程；</li>
+<li><strong>插件进程(Plugin Process)</strong>：主要负责插件的运行，因插件易崩溃，所以需要通过插件进程来隔离，以保证插件进程崩溃不会对浏览器和页面造成影响；</li>
+</ol>
+
+        <h2 id="构建-DOM-树"   >
+          <a href="#构建-DOM-树" class="heading-link"><i class="fas fa-link"></i></a>构建 DOM 树</h2>
+      <p>我们请求资源，其实是在网络进程中进行的，请求到数据之后，浏览器主进程会通知渲染进程，然后在网络进程和渲染进程之间建立 IPC 通信，将服务器返回的数据发给渲染进程，从而开始了浏览器的渲染流程。</p>
+<p>首先第一步便是构建 DOM 树，但为什么要构建 DOM 树呢？DOM，文档对象模型，是 HTML 和 XML 文档的编程接口，它通过将文档进行结构化，并且定义了对结构的访问方式，使得可以通过 JS 改变改变文档的结构、样式和内容。所以它将页面和脚本连接了起来。知道了构建 DOM 树的原因，接下来就来看看如何渲染引擎是如何构建 DOM 树的。</p>
+<p>在渲染引擎内部，有一个叫做 HTML 解析器（HTML Parser）的模块，它主要负责将 HTML 字节流转换为 DOM 结构。</p>
+
+        <h3 id="标记化：词法分析"   >
+          <a href="#标记化：词法分析" class="heading-link"><i class="fas fa-link"></i></a>标记化：词法分析</h3>
+      <figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div&gt;hello world&lt;&#x2F;div&gt;</span><br><span class="line">&lt;&#x2F;body&gt;</span><br><span class="line">&lt;html&gt;</span><br></pre></td></tr></table></div></figure>
+
+<p>如上一段简单的代码，在从网络进程传输过来的时候就是字节流的形式，需要通过分词器先将字节流转换为一个个的 Token，生成的 Token 分为两种形式，Tag Token 和 文本 Token。上述 HTML 代码通过词法分析生成的 Token 可以表示为：</p>
+<p><code>startTag:html</code>、<code>startTag:body</code>、<code>startTag:div</code>、<code>hello world</code>、<code>endTag:div</code>、<code>endTag:body</code>、<code>endTag:html</code>。</p>
+
+        <h3 id="建树：语法分析"   >
+          <a href="#建树：语法分析" class="heading-link"><i class="fas fa-link"></i></a>建树：语法分析</h3>
+      <p>在 HTML 解析器中维护了一个 Token 栈，该结构主要用来维护父子节点以及标签，它会按照一定的规则将上述流程生成的 Token 压入栈中：</p>
+<ul>
+<li>HTML 解析器默认会创建一个根为 document 的空 DOM 结构；</li>
+<li>如果压入栈中的是 startTag Token，HTML 解析器会为该 Token 创建一个 DOM 节点，然后将该节点加入到 DOM 树中；</li>
+<li>如果遇到的是文本 Token，那么会创建一个文本节点，并将该节点加入 DOM 树，它的父节点就是当前栈顶 Token 所对应的 DOM 节点，文本节点是不需要压入栈的；</li>
+<li>如果遇到的是 endTag Token，HTML 解析器会查看 Token 栈顶的元素是否为匹配的 startTag Token，比如 startTag:div 和 endTag:div，如果是就将 startTag:div 从栈中弹出，表示该元素解析完成。</li>
+</ul>
+<p>通过分词器产生的新 Token 不断的入栈和出栈，整个解析过程一直持续下去，直到分词器将所有字节流分词完成。</p>
+
+        <h2 id="样式计算"   >
+          <a href="#样式计算" class="heading-link"><i class="fas fa-link"></i></a>样式计算</h2>
+      
+        <h3 id="格式化-CSS"   >
+          <a href="#格式化-CSS" class="heading-link"><i class="fas fa-link"></i></a>格式化 CSS</h3>
+      <p>CSS 样式来源主要有三种：</p>
+<ul>
+<li>通过 link 引用的外部 CSS 文件；</li>
+<li><code>&lt;style&gt;</code>标记内的 CSS；</li>
+<li>元素的 style 属性内嵌的 CSS。</li>
+</ul>
+<p>和 HTML 文件一样，浏览器也是无法直接理解这些纯文本的 CSS 样式，因此渲染引擎接收到 CSS 文本之后第一件事情就是将其转化为一个结构化的对象，即 styleSheets。</p>
+<p>在浏览器控制台能够通过 <code>document.styleSheets</code> 来查看这个最终的结构。当然，这个结构包含了以上三种 CSS 来源，为后面的样式操作提供了基础。</p>
+
+        <h3 id="标准化-CSS"   >
+          <a href="#标准化-CSS" class="heading-link"><i class="fas fa-link"></i></a>标准化 CSS</h3>
+      <p>有一些 CSS 样式的数值并不容易被渲染引擎所理解，因此需要在计算样式之前将它们标准化，如 em-&gt;px,red-&gt;#ff0000,bold-&gt;700 等等。</p>
+
+        <h3 id="计算出-DOM-树中每个节点的具体样式"   >
+          <a href="#计算出-DOM-树中每个节点的具体样式" class="heading-link"><i class="fas fa-link"></i></a>计算出 DOM 树中每个节点的具体样式</h3>
+      <p>现在样式的属性已被标准化了，也有了 DOM 树，那么接下来就需要计算 DOM 树中每个节点的样式属性了，如何计算呢？这就涉及到 CSS 的继承规则和层叠规则了。</p>
+<ul>
+<li>首先是 CSS 继承。CSS 继承就是每个 DOM 节点都包含有父节点的样式，如果都没有设置，那么就会就会采用浏览器默认样式，也叫 UserAgent 样式；</li>
+<li>然后是层叠，层叠是 CSS 的一个基本特征，它是一个定义了如何合并来自多个源的属性值的算法。它在 CSS 处于核心地位，CSS 的全称“层叠样式表”正是强调了这一点。</li>
+</ul>
+<p>在计算完样式之后，所有的样式值会被挂在到 window.getComputedStyle 当中，也就是可以通过 JS 来获取计算后的样式，非常方便。</p>
+
+        <h2 id="布局阶段"   >
+          <a href="#布局阶段" class="heading-link"><i class="fas fa-link"></i></a>布局阶段</h2>
+      <p>通过上面的过程，有了 DOM 树和样式，那么接下来就需要将样式填充到 DOM 树中，即布局树 Layout Tree。生成布局树的大体过程如下：</p>
+<ul>
+<li>遍历 DOM 树中的所有可见节点，并把这些节点加到布局树中；</li>
+<li>而不可见的节点会被布局树忽略掉，如 head 标签下面的全部内容，再比如 body.p.span 这个元素，因为它的属性包含 dispaly:none，所以这个元素也没有被包进布局树。</li>
+</ul>
+
+        <h2 id="分层"   >
+          <a href="#分层" class="heading-link"><i class="fas fa-link"></i></a>分层</h2>
+      <p>通常页面中有很多复杂的效果，比如旋转缩放效果、页面滚动等等，如果由布局树直接生成目标图片的话，每当页面中有很小的改动，全部内容便需要重新绘制，非常影响页面的体验。为此，Chrome 团队提出了分层和合成的概念，即将一些可能经常变化等的属性，渲染为单独的图层，这样当属性改变时也只会改变当前图层，不会对其他图层产生影响，最后再将所有的图层合并起来。那么什么时候会产生新的图层呢？</p>
+<ol>
+<li>拥有层叠上下文属性的节点，如<ol>
+<li>HTML 根元素本身；</li>
+<li>普通元素设置 position 不为 static，且设置了 z-index 属性；</li>
+<li>元素的 opacity 不为 1；</li>
+<li>元素的 transform 不会 none；</li>
+<li>元素的 isolation 是 isolate；</li>
+<li>will-change 指定的属性值为上面任意一个；</li>
+</ol>
+</li>
+<li>需要剪裁的地方<br>比如一个 div，你只给他设置 100 * 100 像素的大小，而你在里面放了非常多的文字，那么超出的文字部分就需要被剪裁。当然如果出现了滚动条，那么滚动条会被单独提升为一个图层。</li>
+</ol>
+
+        <h2 id="图层绘制"   >
+          <a href="#图层绘制" class="heading-link"><i class="fas fa-link"></i></a>图层绘制</h2>
+      <p>渲染引擎实现图层的绘制，会把一个图层的绘制拆分成很多小的绘制指令，然后再把这些指令按照顺序组成一个待绘制列表。如下以百度首页为例，通过在 Chrome 开发者工具中选择<code>more tool ---&gt; Layers</code>，就可以看到：</p>
+<p><img src="https://s1.ax1x.com/2020/06/08/tfTw0s.jpg" alt="tfTw0s.jpg"></p>
+
+        <h2 id="栅格化（raster）操作"   >
+          <a href="#栅格化（raster）操作" class="heading-link"><i class="fas fa-link"></i></a>栅格化（raster）操作</h2>
+      <p>绘制列表生成好了之后便开始执行绘制操作，绘制操作是由渲染引擎中的合成线程来完成的，当图层的绘制列表准备好之后，主线程会把该绘制列表提交（commit）给合成线程。</p>
+<p>在有些情况下，有的图层可以很大，比如有的页面你使用滚动条要滚动好久才能滚动到底部，但是通过视口，用户只能看到页面的很小一部分，所以在这种情况下，要绘制出所有图层内容的话，就会产生太大的开销，而且也没有必要。基于这个原因，合成线程会将图层划分为图块（tile），这些图块的大小通常是 256x256 或者 512x512。</p>
+<p>然后合成线程会按照视口附近的图块来优先生成位图，实际生成位图的操作是由栅格化来执行的。所谓栅格化，是指将图块转换为位图。而图块是栅格化执行的最小单位。渲染进程维护了一个栅格化的线程池，所有的图块栅格化都是在线程池内执行的。通常，栅格化过程都会使用 GPU 来加速生成，GPU 操作是运行在 GPU 进程中，如果栅格化操作使用了 GPU，那么最终生成位图的操作是在 GPU 中完成的，这就涉及到了跨进程操作。渲染进程把生成图块的指令发送给 GPU，然后在 GPU 中执行生成图块的位图，并保存在 GPU 的内存中。</p>
+
+        <h2 id="合成与显示"   >
+          <a href="#合成与显示" class="heading-link"><i class="fas fa-link"></i></a>合成与显示</h2>
+      <p>栅格化操作完成后，合成线程会生成一个绘制命令，即”DrawQuad”，并发送给浏览器进程。<br>浏览器进程中的 viz 组件接收到这个命令，根据这个命令，把页面内容绘制到内存，也就是生成了页面，然后把这部分内存发送给显卡。为什么发给显卡呢？我想有必要先聊一聊显示器显示图像的原理。<br>无论是 PC 显示器还是手机屏幕，都有一个固定的刷新频率，一般是 60 HZ，即 60 帧，也就是一秒更新 60 张图片，一张图片停留的时间约为 16.7 ms。而每次更新的图片都来自显卡的前缓冲区。而显卡接收到浏览器进程传来的页面后，会合成相应的图像，并将图像保存到后缓冲区，然后系统自动将前缓冲区和后缓冲区对换位置，如此循环更新。<br>看到这里你也就是明白，当某个动画大量占用内存的时候，浏览器生成图像的时候会变慢，图像传送给显卡就会不及时，而显示器还是以不变的频率刷新，因此会出现卡顿，也就是明显的掉帧现象。</p>
+
+        <h2 id="总结"   >
+          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a>总结</h2>
+      <p>到这里基本上把渲染流程走完了，可以通过一张图来总结一下。</p>
+<p><img src="https://s1.ax1x.com/2020/06/08/tfO8ts.png" alt="tfO8ts.png"></p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yoursite.com">Christine Yin</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yoursite.com/2020/06/08/browser-render-5/">http://yoursite.com/2020/06/08/browser-render-5/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/%E6%B8%B2%E6%9F%93/">渲染</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2020/06/08/browser-https-7/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">HTTPS 是如何确保安全的？</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2020/06/05/browser-tcp-6/"><span class="paginator-prev__text">浅析 TCP/IP</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器架构"><span class="toc-number">1.</span> <span class="toc-text">
+          浏览器架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建-DOM-树"><span class="toc-number">2.</span> <span class="toc-text">
+          构建 DOM 树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标记化：词法分析"><span class="toc-number">2.1.</span> <span class="toc-text">
+          标记化：词法分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建树：语法分析"><span class="toc-number">2.2.</span> <span class="toc-text">
+          建树：语法分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#样式计算"><span class="toc-number">3.</span> <span class="toc-text">
+          样式计算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#格式化-CSS"><span class="toc-number">3.1.</span> <span class="toc-text">
+          格式化 CSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标准化-CSS"><span class="toc-number">3.2.</span> <span class="toc-text">
+          标准化 CSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算出-DOM-树中每个节点的具体样式"><span class="toc-number">3.3.</span> <span class="toc-text">
+          计算出 DOM 树中每个节点的具体样式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#布局阶段"><span class="toc-number">4.</span> <span class="toc-text">
+          布局阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分层"><span class="toc-number">5.</span> <span class="toc-text">
+          分层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图层绘制"><span class="toc-number">6.</span> <span class="toc-text">
+          图层绘制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#栅格化（raster）操作"><span class="toc-number">7.</span> <span class="toc-text">
+          栅格化（raster）操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#合成与显示"><span class="toc-number">8.</span> <span class="toc-text">
+          合成与显示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">9.</span> <span class="toc-text">
+          总结</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://www.zhideedu.com/UploadFiles/img_3_3865507487_3939955310_26.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Write code and Love life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://weibo.com/" target="_blank" rel="noopener" data-popover="微博" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weibo"></i></span></a><a class="sidebar-ov-social-item" href="yournumber" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">45</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">17</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">56</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Christine Yin</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v4.2.1</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.0.1</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="200" alpha="0.6" zIndex="-1"></script><script src="/js/utils.js?v=2.0.1"></script><script src="/js/stun-boot.js?v=2.0.1"></script><script src="/js/scroll.js?v=2.0.1"></script><script src="/js/header.js?v=2.0.1"></script><script src="/js/sidebar.js?v=2.0.1"></script></body></html>

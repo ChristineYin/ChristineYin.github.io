@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.0.1" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.0.1" type="image/png" sizes="32x32"><meta name="description" content="浏览器的本地存储主要分为 Cookie、WebStorage 和 IndexedDB, 其中 WebStorage 又可以分为 localStorage 和 sessionStorage。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器 之 本地存储">
+<meta property="og:url" content="http://yoursite.com/2020/05/28/browser-storage-2/index.html">
+<meta property="og:site_name" content="橙子">
+<meta property="og:description" content="浏览器的本地存储主要分为 Cookie、WebStorage 和 IndexedDB, 其中 WebStorage 又可以分为 localStorage 和 sessionStorage。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-28T21:49:16.000Z">
+<meta property="article:modified_time" content="2021-03-03T04:38:03.332Z">
+<meta property="article:author" content="Christine Yin">
+<meta property="article:tag" content="浏览器">
+<meta property="article:tag" content="本地存储">
+<meta name="twitter:card" content="summary"><meta name="keywords" content="Christine Yin, 橙子"><meta name="description" content=""><title>浏览器 之 本地存储 | 橙子</title><link ref="canonical" href="http://yoursite.com/2020/05/28/browser-storage-2/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.0.1"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"dark","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">橙子</div><div class="header-banner-info__subtitle"></div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">浏览器 之 本地存储</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2020-05-28</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-03-03</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">1.4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">7分</span></span></div></header><div class="post-body"><p>浏览器的本地存储主要分为 Cookie、WebStorage 和 IndexedDB, 其中 WebStorage 又可以分为 localStorage 和 sessionStorage。</p>
+
+        <h2 id="Cookie"   >
+          <a href="#Cookie" class="heading-link"><i class="fas fa-link"></i></a>Cookie</h2>
+      <p>Cookie 最开始被设计出来其实并不是来做本地存储的，而是为了弥补 HTTP 在状态管理上的不足。HTTP 协议是一个无状态协议，客户端向服务器发请求，服务器返回响应，故事就这样结束了，但是下次发请求如何让服务端知道客户端是谁呢？这种背景下，就产生了 Cookie.Cookie 本质上就是浏览器里面存储的一个很小的文本文件，内部以键值对的方式来存储(在 chrome 开发者面板的 Application 这一栏可以看到)。向同一个域名下发送请求，都会携带相同的 Cookie，服务器拿到 Cookie 进行解析，便能拿到客户端的状态。Cookie 的作用很好理解，就是用来做状态存储的，但它也是有诸多致命的缺陷的：</p>
+<ol>
+<li><strong>容量缺陷。</strong>Cookie 的体积上限只有 4KB，只能用来存储少量的信息。</li>
+<li><strong>性能缺陷。</strong>Cookie 紧跟域名，不管域名下面的某一个地址需不需要这个 Cookie ，请求都会携带上完整的 Cookie，这样随着请求数的增多，其实会造成巨大的性能浪费的，因为请求携带了很多不必要的内容。</li>
+<li><strong>安全缺陷。</strong>由于 Cookie 以纯文本的形式在浏览器和服务器中传递，很容易被非法用户截获，然后进行一系列的篡改，在 Cookie 的有效期内重新发送给服务器，这是相当危险的。另外，在 HttpOnly 为 false 的情况下，Cookie 信息能直接通过 JS 脚本来读取。</li>
+</ol>
+
+        <h2 id="localStorage"   >
+          <a href="#localStorage" class="heading-link"><i class="fas fa-link"></i></a>localStorage</h2>
+      <p>localStorage 有一点跟 Cookie 一样，就是针对一个域名，即在同一个域名下，会存储相同的一段 localStorage。<br>不过它相对 Cookie 还是有相当多的区别的:</p>
+<ol>
+<li>容量。localStorage 的容量上限为 5M，相比于 Cookie 的 4K 大大增加。当然这个 5M 是针对一个域名的，因此对于一个域名是持久存储的。</li>
+<li>只存在客户端，默认不参与与服务端的通信。这样就很好地避免了 Cookie 带来的性能问题和安全问题。</li>
+<li>接口封装。通过 localStorage 暴露在全局，并通过它的 setItem 和 getItem 等方法进行操作，非常方便。</li>
+</ol>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 操作localStorage</span><br><span class="line"><span class="built_in">let</span> obj = &#123; name: <span class="string">"sanyuan"</span>, age: 18 &#125;;</span><br><span class="line">localStorage.setItem(<span class="string">"name"</span>, <span class="string">"sanyuan"</span>);</span><br><span class="line">localStorage.setItem(<span class="string">"info"</span>, JSON.stringify(obj));</span><br><span class="line"></span><br><span class="line">// 接着进入相同的域名时就能拿到相应的值</span><br><span class="line"><span class="built_in">let</span> name = localStorage.getItem(<span class="string">"name"</span>);</span><br><span class="line"><span class="built_in">let</span> info = JSON.parse(localStorage.getItem(<span class="string">"info"</span>));</span><br></pre></td></tr></table></div></figure>
+
+<p>从这里可以看出，localStorage 其实存储的都是字符串，如果是存储对象需要调用 JSON 的 stringify 方法，并且用 JSON.parse 来解析成对象。</p>
+<p>应用场景：利用 localStorage 的较大容量和持久特性，可以利用 localStorage 存储一些内容稳定的资源，比如官网的 logo，存储 Base64 格式的图片资源，因此利 localStorage</p>
+
+        <h2 id="sessionStorage"   >
+          <a href="#sessionStorage" class="heading-link"><i class="fas fa-link"></i></a>sessionStorage</h2>
+      <p>特点：sessionStorage 以下方面和 localStorage 一致:</p>
+<ol>
+<li>容量。容量上限也为 5M。</li>
+<li>只存在客户端，默认不参与与服务端的通信。</li>
+<li>接口封装。除了 sessionStorage 名字有所变化，存储方式、操作方式均和 localStorage 一样。</li>
+</ol>
+<p>但 sessionStorage 和 localStorage 有一个本质的区别，那就是前者只是会话级别的存储，并不是持久化存储。会话结束，也就是页面关闭，这部分 sessionStorage 就不复存在了。</p>
+<p>应用场景</p>
+<ul>
+<li>可以用它对表单信息进行维护，将表单信息存储在里面，可以保证页面即使刷新也不会让之前的表单信息丢失。</li>
+<li>可以用它存储本次浏览记录。如果关闭页面后不需要这些记录，用 sessionStorage 就再合适不过了。事实上微博就采取了这样的存储方式。</li>
+</ul>
+
+        <h2 id="IndexedDB"   >
+          <a href="#IndexedDB" class="heading-link"><i class="fas fa-link"></i></a>IndexedDB</h2>
+      <p>IndexedDB 是运行在浏览器中的非关系型数据库, 本质上是数据库，绝不是和刚才 WebStorage 的 5M 一个量级，理论上这个容量是没有上限的。</p>
+<p>关于它的使用，本文侧重原理，而且 MDN 上的教程文档已经非常详尽，这里就不做赘述了，感兴趣可以看一下使用文档。<br>接着我们来分析一下 IndexedDB 的一些重要特性，除了拥有数据库本身的特性，比如支持事务，存储二进制数据，还有这样一些特性需要格外注意：</p>
+<ul>
+<li>键值对存储。内部采用对象仓库存放数据，在这个对象仓库中数据采用键值对的方式来存储。</li>
+<li>异步操作。数据库的读写属于 I/O 操作, 浏览器中对异步 I/O 提供了支持。</li>
+<li>受同源策略限制，即无法访问跨域的数据库。</li>
+</ul>
+
+        <h2 id="总结"   >
+          <a href="#总结" class="heading-link"><i class="fas fa-link"></i></a>总结</h2>
+      <p>浏览器中各种本地存储和缓存技术的发展，给前端应用带来了大量的机会，PWA 也正是依托了这些优秀的存储方案才得以发展起来。重新梳理一下这些本地存储方案:</p>
+<ul>
+<li>cookie 并不适合存储，而且存在非常多的缺陷。</li>
+<li>Web Storage 包括 localStorage 和 sessionStorage, 默认不会参与和服务器的通信。</li>
+<li>IndexedDB 为运行在浏览器上的非关系型数据库，为大型数据的存储提供了接口。</li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yoursite.com">Christine Yin</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yoursite.com/2020/05/28/browser-storage-2/">http://yoursite.com/2020/05/28/browser-storage-2/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/%E6%9C%AC%E5%9C%B0%E5%AD%98%E5%82%A8/">本地存储</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2020/05/28/browser-CDN-9/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">浏览器 之 CDN</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2020/05/28/es6-promise/"><span class="paginator-prev__text">ES6 之 Promise常见面试题</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie"><span class="toc-number">1.</span> <span class="toc-text">
+          Cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#localStorage"><span class="toc-number">2.</span> <span class="toc-text">
+          localStorage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sessionStorage"><span class="toc-number">3.</span> <span class="toc-text">
+          sessionStorage</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IndexedDB"><span class="toc-number">4.</span> <span class="toc-text">
+          IndexedDB</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">
+          总结</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://www.zhideedu.com/UploadFiles/img_3_3865507487_3939955310_26.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Write code and Love life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://weibo.com/" target="_blank" rel="noopener" data-popover="微博" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weibo"></i></span></a><a class="sidebar-ov-social-item" href="yournumber" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">45</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">17</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">56</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Christine Yin</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v4.2.1</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.0.1</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="200" alpha="0.6" zIndex="-1"></script><script src="/js/utils.js?v=2.0.1"></script><script src="/js/stun-boot.js?v=2.0.1"></script><script src="/js/scroll.js?v=2.0.1"></script><script src="/js/header.js?v=2.0.1"></script><script src="/js/sidebar.js?v=2.0.1"></script></body></html>

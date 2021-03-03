@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.0.1" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.0.1" type="image/png" sizes="32x32"><meta name="description" content="作为一名前端工程师，对于 JS 代码肯定不陌生，但是对于 JS 代码是如何运行的？和我们常见的 V8 又有什么关系？不知你是不是也会和我有同样的疑问。为此查阅了一些资料，有了简单的初步了解，下面是总结的一些内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="V8 如何执行一段 JS 代码？">
+<meta property="og:url" content="http://yoursite.com/2020/05/31/browser-v8/index.html">
+<meta property="og:site_name" content="橙子">
+<meta property="og:description" content="作为一名前端工程师，对于 JS 代码肯定不陌生，但是对于 JS 代码是如何运行的？和我们常见的 V8 又有什么关系？不知你是不是也会和我有同样的疑问。为此查阅了一些资料，有了简单的初步了解，下面是总结的一些内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/02/tYoaLV.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/02/ttqH0I.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/02/ttInoD.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/02/ttLqKJ.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/02/tN9VCn.jpg">
+<meta property="og:image" content="https://s1.ax1x.com/2020/06/02/tNCmid.jpg">
+<meta property="article:published_time" content="2020-05-31T18:01:57.000Z">
+<meta property="article:modified_time" content="2021-03-03T04:38:03.336Z">
+<meta property="article:author" content="Christine Yin">
+<meta property="article:tag" content="V8">
+<meta property="article:tag" content="JS 引擎">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/06/02/tYoaLV.jpg"><meta name="keywords" content="Christine Yin, 橙子"><meta name="description" content=""><title>V8 如何执行一段 JS 代码？ | 橙子</title><link ref="canonical" href="http://yoursite.com/2020/05/31/browser-v8/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.0.1"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"dark","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">橙子</div><div class="header-banner-info__subtitle"></div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">V8 如何执行一段 JS 代码？</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2020-05-31</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-03-03</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">22分</span></span></div></header><div class="post-body"><p>在了解 V8 是如何执行一段 JS 代码之前，我们先了解一下计算机语言的发展。</p>
+
+        <h2 id="计算机语言"   >
+          <a href="#计算机语言" class="heading-link"><i class="fas fa-link"></i></a>计算机语言</h2>
+      <p>我们知道计算机语言的种类是非常的多，总的来说可以分为<strong>机器语言、汇编语言</strong>和<strong>高级语言</strong>三大类。</p>
+<p><strong>机器语言</strong></p>
+<p>在计算机发明之初，人们为了去控制计算机完成自己的任务或者项目，只能去编写”0”、”1”这种的二进制数字串去控制电脑，其实就是控制计算机硬件的高低电平或通路开路，这种语言就是机器语言。机器语言比较晦涩难懂，使用时也非常痛苦。而且，不同计算机的运行环境不同，指令操作方式也不尽相同，所以机器语言具有特定性，不同的计算机需要不同的编程。</p>
+<p><strong>汇编语言</strong></p>
+<p>不难看出机器语言作为一种编程语言，灵活性和可阅读性较差，为了改变这种现状，人们对机器语言进行了升级：用一些容易理解和记忆的字母、单词来代替一个特定的指令。通过这种方法人们相对容易阅读已经完成的程序，并且对程序中的 bug 修复和维护都变得更加简单方便，这种语言即第二代计算机语言 — 汇编语言。</p>
+<p>汇编语言虽然有了很大的进步，但它仍然是面向机器的语言，很难从其代码上理解程序设计意图，涉及出来的程序不易被移植。</p>
+<p><strong>高级语言</strong></p>
+<p>汇编语言之后，人们发现了限制程序推广的关键因素是程序的可移植性。所以需要设计一个能够不依赖计算机硬件，能够在不同机器上运行的程序，这样可以免去很多编程的重复过程、提高效率，同时接近于数学语言或人的自然语言，所以人们又设计出了高级语言，来满足人们对于高效简的编程语言的追求。</p>
+<p>汇编语言较高级语言而言，特点是能被计算机直接识别和执行，使用它进行编程可以减少占用空间、提高运行速度，并直接对硬件实施控制，尤其是需要实时控制的时候，有着不可替代的重要地位；而高级语言是面向使用者，它的表达能力强、功能多、编程效率高、上手速度快。这两者并不是互斥的，而是有着紧密的联系，在一些程序设计中，如果把两者结合起来使用，可以解决很多特性难题。</p>
+<p><strong>高级语言的工作方式</strong></p>
+<p>用高级编程语言编写的程序需要经过翻译，翻译成机器所能识别的二进制数才能由计算机去执行。翻译的方法有两种，一种是解释（解释型语言），一种是编译（编译型语言）。两种方式只是翻译的时间不同。</p>
+<ol>
+<li><p>编译型语言：程序在执行之前需要一个专门的编译过程，把程序编译成为机器语言的文件，运行时不再需要重新翻译，直接使用编译的结果就行了。程序的执行效率高，依赖编译器，跨平台性差些。如 C、C++等。</p>
+</li>
+<li><p>解释性语言：程序不需要编译，程序在运行时才翻译成机器语言，每执行一次都要翻译一次，因此效率比较低。</p>
+</li>
+</ol>
+<p>不管你使用的是编译型语言，还是解释型语言，它们都有一个共同的特点，就是需要将源代码作为纯文本解析为<strong>抽象语法树</strong>的数据结构。</p>
+
+        <h2 id="什么是-V8"   >
+          <a href="#什么是-V8" class="heading-link"><i class="fas fa-link"></i></a>什么是 V8</h2>
+      <p>我们日常开发所用的 JavaScript，就是一种高级编程语言，采用的是解释型方式，所以需要翻译成机器能够识别的代码才可以执行。JS 引擎就是一个专门用来处理 JavaScript 脚本的虚拟机，虚拟机即虚构出来的计算机，能够通过模拟实际计算机的各种功能实现代码的执行。所以 JS 引擎能够提供执行 JavaScript 代码的运行环境，使用 JS 引擎执行代码时，你不必考虑操作系统的差异，也不需要考虑不同体系结构的计算机差异，只需要按照虚拟机的规范写好即可。</p>
+<p>我们平时接触的不同浏览器的 JS 引擎也不同，比如 苹果公司在 Safari 中用的是 JavaScriptCore 虚拟机，Firefox 使用了 TraceMonkey 虚拟机，而 Chrome 则使用了 V8 虚拟机。</p>
+<p>对于 V8 相信大多数开发者都不陌生，V8 是一个由 Google 开发的开源 JS 引擎，目前市场占有率很大，主要用在 Chrome 浏览器和 Node.js 中，其核心是执行 JavaScript 代码。那么 V8 有哪些组成部分呢？</p>
+<p>V8 是由许多子模块构成的，其中最重要的 4 个模块有：</p>
+<ul>
+<li>Parse：负责将 JavaScript 源码转换为 Abstract Syntax Tree(AST);</li>
+<li>Ignition：interpreter，即解释器，负责将 AST 转换为 Bytecode 字节码，然后解释执行字节码；同时收集 TurboFan 优化编译所需的信息，比如函数参数的类型；</li>
+<li>TurboFun：compiler，即编译器，利用 Ignition 所收集的类型信息，将 Bytecode 字节码转换为优化的汇编代码；</li>
+<li>Orinoco：garbage collector，垃圾回收模块，负责将程序不再需要的内存空间回收；</li>
+</ul>
+
+        <h2 id="执行过程"   >
+          <a href="#执行过程" class="heading-link"><i class="fas fa-link"></i></a>执行过程</h2>
+      <p>那么 V8 是怎么执行 JavaScript 代码的呢？其主要的核心流程可以分为<strong>编译</strong>和<strong>执行</strong>两步，简单描述就是，Parse 将 JS 源代码转换为 AST，然后 Ignition 将 AST 转换为字节码 Bytecode，最后 TurboFan 将字节码转换为经过优化的机器码，下面来看一下具体的执行流程。</p>
+
+        <h3 id="生成抽象语法树-AST"   >
+          <a href="#生成抽象语法树-AST" class="heading-link"><i class="fas fa-link"></i></a>生成抽象语法树 AST</h3>
+      <p>我们先来了解一下 AST 相关的一些概念。</p>
+<p>在计算机科学中，抽象语法树（Abstract Syntax Tree，AST），简称语法树（Syntax Tree），是源代码语法结构的一种抽象表示。它以树状的形式表现编程语言的语法结构，树上的每个节点都表示源代码中的一种结构。之所以说语法是”抽象”的，是因为这里的语法并不会表示出真实语法中出现的每个细节。比如，嵌套括号被隐含于树的结构中，并没有以节点的形式呈现；而类似于<code>if-elseif-else</code>这样的条件跳转语句，可以使用三个分支节点表示。为了更加直观的理解，我们举个栗子看一下：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (foo == <span class="literal">true</span>) &#123;</span><br><span class="line">    bar = <span class="string">'hello world'</span>;</span><br><span class="line">    alert(bar)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://s1.ax1x.com/2020/06/02/tYoaLV.jpg" alt="tYoaLV.jpg"></p>
+<p>一般的，在源代码的翻译和编译过程中，语法分析器 Parser 进行语法检查、并构建由输入的单词组成的数据结构，这里输入的单词通常是使用一个独立的词法分析器 Lexer 从输入的字符流中分离出一个个的”单词”，并将单词流作为语法分析器的输入。</p>
+<p>在获得抽象语法树的过程中主要有两个阶段，一是词法分析，二是语法分析：</p>
+<ul>
+<li><strong>词法分析</strong>：将源码字符串拆成最小的、不可再分的词法单元 token。例如代码 <code>var a = 1;</code>，这段代码通常会被分解成五个词法单元：<code>var</code>，<code>a</code>，<code>=</code>，<code>1</code>，<code>;</code>。空格是否会被当作词法单元，取决于空格在这门语言中是否具有意义，在 JavaScript 中，空格不被当作词法单元；</li>
+<li><strong>语法分析</strong>：这个过程是将词法单元流转换成一个由元素逐级嵌套所组成的代表了程序语法结构的树，这个树即抽象语法树。例如<code>var a = 1;</code>的抽象语法树结构为：</li>
+</ul>
+<p><img src="https://s1.ax1x.com/2020/06/02/ttqH0I.jpg" alt="ttqH0I.jpg"></p>
+<p>再如下图，代码为一个简单的函数声明。词法分析阶段，将代码作为字符串输入获得关键词，图中<code>function</code>、<code>square</code>、<code>(</code>、<code>)</code>、<code>{</code>、<code>}</code>等都被识别为关键词。语法分析阶段，对关键词的组合行程一个个节点，如 <code>n*n</code>这 3 个关键词组合成二元表达式，关键词 <code>return</code> 与二元表达式组合成 return 语句。最后组合成一个<code>函数声明语句</code>。</p>
+<p><img src="https://s1.ax1x.com/2020/06/02/ttInoD.jpg" alt="ttInoD.jpg"></p>
+<p>与上述代码对应的抽象语法树结构如下：</p>
+<p><img src="https://s1.ax1x.com/2020/06/02/ttLqKJ.jpg" alt="ttLqKJ.jpg"></p>
+<p>上述图片是借助在线工具 <span class="exturl"><a class="exturl__link"   href="https://astexplorer.net"  target="_blank" rel="noopener">https://astexplorer.net</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span> 生成的，大家想了解更多可以自己尝试。</p>
+<p>其实抽象语法树在我们工作中的应用也是比较常见的，比如 <code>Babel</code>，这个应该是前端同学很熟悉的，有的<code>ES6</code>的语法现在浏览器还不能支持，需要转为<code>ES5</code>语法，这个过程就是借助<code>Babel</code>实现的，<code>Babel</code>是一个<code>JavaScript</code>编译器，分三个阶段实现的：解析、转译、生成。将<code>ES6</code>源码解析成<code>AST</code>，再将<code>ES6</code>语法的<code>AST</code>转成<code>ES5</code>的<code>AST</code>，最后利用它来生成<code>ES5</code>源代码，这就是<code>Babel</code>的基本实现原理。</p>
+<p>同样的，<code>ESLint</code>的原理也大致相同，检测流程将源码转换成<code>AST</code>，然后再利用<code>AST</code>来检测代码规范。另外还有 uglify、webpack 等等都是基于抽象语法树来处理的，非常强大。</p>
+
+        <h3 id="生成字节码"   >
+          <a href="#生成字节码" class="heading-link"><i class="fas fa-link"></i></a>生成字节码</h3>
+      <p>上面已经讲述了将 JS 源代码转换为 AST，现在需要做的是将 AST 转换成 Bytecode。</p>
+<p>什么是字节码？wiki 百科中这样描述：字节码（Bytecode）通常指的是已经经过编译，但与特定机器代码无关，需要解释器转译后才能成为机器代码的中间代码。字节码通常不像源码一样可以让人阅读，而是编码后的数值常量、引用、指令等构成的序列。</p>
+<p>V8 未诞生之前，早期最主流的 JS 引擎是 JavaScriptCore 引擎。JavaScriptCore 是通过生成字节码再将字节码转化成二进制代码的方式运行的，而 V8 诞生的使命就是性能的极致，Google 觉得这种架构生成字节码会浪费时间，V8 早期采用了直接生成机器码的方式。我们一起来看下 V8 早期架构是如何执行 js 代码的：</p>
+<ol>
+<li>将 js 源代码转化成 AST</li>
+<li>通过 Full-Codegen 引擎编译 AST 变成二进制文件，然后直接执行这些二进制文件</li>
+<li>在执行二进制代码的过程中，标记重复执行的函数，将标记的代码通过 Crankshaft 引擎进行优化编译生成效率更高的二进制代码，再次运行到这个函数时使用效率更高的二进制代码</li>
+</ol>
+<p>之所以要引入字节码，是因为随着网页的复杂化以及移动端的流行，早期的架构带来了一些问题。</p>
+<ol>
+<li>内存占用问题。在 V8 执行的过程中会将 js 源代码转化为二进制并且将二进制代码存储到内存中，退出进程后会将二进制代码存储到硬盘上。将 js 源码转化成二进制代码占用的内存空间是非常大的，如果说一个 js 源码的文件大小是 1M，那么生成的二进制代码可能就是 10 几 M，而早期的手机内存普遍不高，过度占用会导致性能大大降低。</li>
+</ol>
+<p><img src="https://s1.ax1x.com/2020/06/02/tN9VCn.jpg" alt="tN9VCn.jpg"></p>
+<ol start="2">
+<li>代码复杂度高。因为不同的 CPU 架构对应的指令集是完全不同的，而市面上 CPU 架构的种类又非常多，那么将 AST 转化为二进制代码的 Full-Codegen 引擎以及优化编译的 Crankshaft 引擎要针对不同的 CPU 架构编写代码，这个复杂度及工作量可想而知，而对字节码进行编译可以大大减少这个工作量，大概如下图：</li>
+</ol>
+<p><a href="https://imgchr.com/i/tNCmid" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/02/tNCmid.jpg" alt="tNCmid.jpg"></a></p>
+<p>为了解决上述问题 V8 做了改进，下面我们看看改进后的 V8 架构是如何执行 js 代码的:</p>
+<ol>
+<li>将 js 源代码转化为 AST</li>
+<li>通过 Ignition 解释器将 AST 编译成字节码，开始逐句对字节码进行解释成二进制代码并执行</li>
+<li>在解释器执行的过程中，标记重复执行的热点代码，将标记的代码通过 Turbofan 引擎进行编译生成效率更高的二进制代码，再次运行到这个函数时便只执行高效代码而不再解释执行字节码。</li>
+</ol>
+<p>如果你对生成的 Bytecode 感兴趣，可以使用 node 命令（node 版本为 12.6.0）的 –print-bytecode 选项，打印出 Ignition 生成的 Bytecode：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node --<span class="built_in">print</span>-bytecode 文件名</span><br></pre></td></tr></table></div></figure>
+
+
+        <h3 id="生成机器码"   >
+          <a href="#生成机器码" class="heading-link"><i class="fas fa-link"></i></a>生成机器码</h3>
+      <p>解释器 Ignition 除了可以快速生成优化的字节码，还负责执行字节码。第一次执行字节码时，会收集分析数据，解释器会逐条解释。如果函数被多次调用，则它有可能会被识别为热点函数，且 Ignition 收集的类型信息证明可以进行优化编译的化，这时 TurboFan 则会将字节码编译为优化的机器码，以提高代码的执行性能。当再次执行这段代码时，只需要执行编译后的机器码，也可以称为汇编代码。</p>
+<p>我们下面说一下，TurboFan 是如何优化所生成的汇编代码的。以一个 <code>add</code> 函数为例：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> add(x, y) &#123;</span><br><span class="line">    <span class="built_in">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">add(1, 2)</span><br><span class="line">add(3, 4)</span><br><span class="line">add(5, 6)</span><br><span class="line">add(<span class="string">"7"</span>, <span class="string">"8"</span>)</span><br></pre></td></tr></table></div></figure>
+
+<p>由于 JS 的变量是没有类型的，所以 <code>add</code> 函数的参数可以是任意类型：<code>Number</code>、<code>String</code>、<code>Boolean</code>等，这就意味着 <code>add</code> 函数可能是数字相加，可能是字符串拼接，也可能是其他更复杂的操作。如果直接编译的化，生成的代码比如会有很多<code>if...else</code>分支，伪代码如下：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (isInteger(x) &amp;&amp; isInteger(y)) &#123;</span><br><span class="line">    // 整数相加</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (isFloat(x) &amp;&amp; isFloat(y)) &#123;</span><br><span class="line">    // 浮点数相加</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (isString(x) &amp;&amp; isString(y)) &#123;</span><br><span class="line">    // 字符串拼接</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    // 各种其他情况</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>这里只写了 4 个分支，实际上还有更多，比如当参数类型不一致时还得进行类型转换，如果按照伪代码去生成机器码，那生成的代码必然非常冗长，这样会占用很多内存空间。</p>
+<p>Ignition 在执行 <code>add(1, 2)</code>时，已经知道 <code>add</code> 函数的两个参数都是整数，那么 TurboFan 在编译 Bytecode 时，就可以假定<code>add</code>函数的参数是整数，这样就可以极大的简化生成的机器码，伪代码如下：</p>
+<figure class="highlight bash"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (isInteger(x) &amp;&amp; isInteger(y)) &#123;</span><br><span class="line">    // 整数相加</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    // Deoptimization</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>当然这样做也是有风险的，因为如果 <code>add</code> 函数参数不是整数，那么生成的机器码也没法执行，只能反优化为 Bytecode 执行。也就是说，如果 TurboFan 对 <code>add</code> 函数进行编译优化的话，<code>add(3, 4)</code> 和 <code>add(5, 6)</code>是可以执行优化的机器码，但是<code>add(&quot;7&quot;, &quot;8&quot;)</code>只能 Deoptimize 为 Bytecode 来执行。TurboFan 所做的不只是根据类型信息来简化代码的执行，还会进行其他优化，比如减少冗余代码等其他更复杂的事情。</p>
+<p>从这个例子可以看出，如果我们的 JS 代码中的变量类型变来变去，会给 V8 引擎增加不少麻烦，为了提高性能，我们可以尽量不要去改变变量的类型。对于性能要求比较高的项目，使用 TypeScript 也是不错的选择。</p>
+<p><strong>参考</strong></p>
+<ul>
+<li><span class="exturl"><a class="exturl__link"   href="https://blog.fundebug.com/2019/07/16/how-does-v8-work"  target="_blank" rel="noopener">https://blog.fundebug.com/2019/07/16/how-does-v8-work</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   href="https://blog.poetries.top/browser-working-principle/guide/part3/lesson14.html"  target="_blank" rel="noopener">https://blog.poetries.top/browser-working-principle/guide/part3/lesson14.html</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+</ul>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yoursite.com">Christine Yin</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yoursite.com/2020/05/31/browser-v8/">http://yoursite.com/2020/05/31/browser-v8/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/V8/">V8</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/JS-%E5%BC%95%E6%93%8E/">JS 引擎</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2020/06/03/browser-hoisting/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">变量提升你理解对了吗？</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2020/05/30/vue-3-0-4/"><span class="paginator-prev__text">Vue 3.0 的一些改变</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#计算机语言"><span class="toc-number">1.</span> <span class="toc-text">
+          计算机语言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是-V8"><span class="toc-number">2.</span> <span class="toc-text">
+          什么是 V8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#执行过程"><span class="toc-number">3.</span> <span class="toc-text">
+          执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成抽象语法树-AST"><span class="toc-number">3.1.</span> <span class="toc-text">
+          生成抽象语法树 AST</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成字节码"><span class="toc-number">3.2.</span> <span class="toc-text">
+          生成字节码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成机器码"><span class="toc-number">3.3.</span> <span class="toc-text">
+          生成机器码</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://www.zhideedu.com/UploadFiles/img_3_3865507487_3939955310_26.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Write code and Love life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://weibo.com/" target="_blank" rel="noopener" data-popover="微博" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weibo"></i></span></a><a class="sidebar-ov-social-item" href="yournumber" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">45</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">17</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">56</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Christine Yin</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v4.2.1</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.0.1</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="200" alpha="0.6" zIndex="-1"></script><script src="/js/utils.js?v=2.0.1"></script><script src="/js/stun-boot.js?v=2.0.1"></script><script src="/js/scroll.js?v=2.0.1"></script><script src="/js/header.js?v=2.0.1"></script><script src="/js/sidebar.js?v=2.0.1"></script></body></html>

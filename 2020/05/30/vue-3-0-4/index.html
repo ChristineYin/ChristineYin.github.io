@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.0.1" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.0.1" type="image/png" sizes="32x32"><meta name="description" content="前段时间 Vue 的作者发布了 Vue3.0 的 pre-Aplha 版，这次就来聊一下目前 vue3.0 之于 vue2.x 的改变有什么。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue 3.0 的一些改变">
+<meta property="og:url" content="http://yoursite.com/2020/05/30/vue-3-0-4/index.html">
+<meta property="og:site_name" content="橙子">
+<meta property="og:description" content="前段时间 Vue 的作者发布了 Vue3.0 的 pre-Aplha 版，这次就来聊一下目前 vue3.0 之于 vue2.x 的改变有什么。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgchr.com/i/tnDzSU">
+<meta property="og:image" content="https://imgchr.com/i/tnyRoR">
+<meta property="og:image" content="https://imgchr.com/i/tny2w9">
+<meta property="og:image" content="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-06.jpg?v=1552744290">
+<meta property="og:image" content="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-07.jpg?v=1552744290">
+<meta property="og:image" content="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-08.jpg?v=1552744290">
+<meta property="og:image" content="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-09.jpg?v=1552744290">
+<meta property="og:image" content="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-10.jpg?v=1552744290">
+<meta property="og:image" content="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-15.jpg?v=1552744290">
+<meta property="article:published_time" content="2020-05-30T14:15:51.000Z">
+<meta property="article:modified_time" content="2021-03-03T04:38:03.336Z">
+<meta property="article:author" content="Christine Yin">
+<meta property="article:tag" content="Vue3.0">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imgchr.com/i/tnDzSU"><meta name="keywords" content="Christine Yin, 橙子"><meta name="description" content=""><title>Vue 3.0 的一些改变 | 橙子</title><link ref="canonical" href="http://yoursite.com/2020/05/30/vue-3-0-4/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.0.1"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":true},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"carbon","highlight":"dark","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 4.2.1"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">橙子</div><div class="header-banner-info__subtitle"></div></div><div class="header-banner-arrow"><div class="header-banner-arrow__icon"><i class="fas fa-angle-down"></i></div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">Vue 3.0 的一些改变</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2020-05-30</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-03-03</span></span><span class="post-meta-item post-meta-item--wordcount"><span class="post-meta-item__icon"><i class="far fa-file-word"></i></span><span class="post-meta-item__info">字数统计</span><span class="post-meta-item__value">4.1k</span></span><span class="post-meta-item post-meta-item--readtime"><span class="post-meta-item__icon"><i class="far fa-clock"></i></span><span class="post-meta-item__info">阅读时长</span><span class="post-meta-item__value">23分</span></span></div></header><div class="post-body"><p>前段时间 <code>Vue</code> 的作者发布了 <code>Vue3.0</code> 的 <code>pre-Aplha</code> 版，这次就来聊一下目前 <code>vue3.0</code> 之于 <code>vue2.x</code> 的改变有什么。首先看一下官方给出的 <code>vue3.0</code> 的设计目标：</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">更小</span><br><span class="line">更快</span><br><span class="line">加强 TypeScript 支持</span><br><span class="line">加强 API 设计一致性</span><br><span class="line">提高自身可维护性</span><br><span class="line">开放更多底层功能</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="更快"   >
+          <a href="#更快" class="heading-link"><i class="fas fa-link"></i></a>更快</h2>
+      
+        <h3 id="1-Vitrual-DOM-重构"   >
+          <a href="#1-Vitrual-DOM-重构" class="heading-link"><i class="fas fa-link"></i></a>1. Vitrual DOM 重构</h3>
+      <p>大家都知道在 <code>Vue2.x</code> 中用的是 <code>Vitrual DOM</code> 渲染机制，它其实是有很多潜在的运行时开销。比如每一次更新的时候整个 <code>Vitrual DOM</code> 理论上是要重新创建它的树状结构，<code>diff</code> 算法需要从头到尾对旧的树和新的树进行进行彻底的遍历和比对，虽然 <code>vue</code> 通过数据侦测在组件树的层面最小化了你需要更新的点，但是组件这个粒度相对还是比较粗的，那么在单个组件内部你的更新依然是对于该组件的整个模板形成的 <code>Vitrual Tree</code> 进行一个彻底的遍历。举个例子</p>
+<p><img src="https://imgchr.com/i/tnDzSU" alt="Alt text"></p>
+<p>左边有这么一个模板，右边是每次在更新的时候算法需要实际进行的操作。一旦更新，从上到下，先要去<code>diff div</code>，看一下是否有更新，如果是同一个<code>div</code>，要去看它的属性有没有变化，然后再去看它的<code>children</code>顺序有没有变化，比较之后还要再看一下子元素有没有变化，子元素的属性有没有变化，子元素的内容有没有变化，实际上模板中只有<code>message</code>一个是动态的，但是每次更新的时候都要去遍历整个过程，所以当一个模板内部只有少量动态节点的时候，这些遍历都是性能的浪费。</p>
+<p>那么传统 <code>Vitrual DOM</code> 为什么要用这么不效率的算法呢？根究其原因是最初的 <code>Vitrual DOM</code> 并不是从模板编译来的，比如说 <code>React Vitrual DOM</code> 是 <code>JSX</code> 编译过来的， <code>JSX</code> 只是 <code>Javascript</code> 的一个语法延伸，所以它具备 <code>Javascript</code> 的一切动态性。</p>
+<p><img src="https://imgchr.com/i/tnyRoR" alt="Alt text"></p>
+<p>上面这一段 <code>Javascript</code> 代码，只分析这段代码你想分析出 <code>i == 2</code> 的时候会产生一个动态的数据是很难做到这一点的，没有一个很稳妥的方法可以分析出这些，反之看上面那个图中的模板，一眼就可以看出除了 <code>message</code> 之外都是不变的。这就是一个包含的可以用于优化的信息量的不同。</p>
+<p>如何最大化的动静结合？既兼容手写 <code>render function</code>，又最大化利用模板静态信息。可以先把整个模板看做静态的，然后分析哪些部分是变化的。比如说刚才的情况，明显可以除了<code>message</code>其他元素解构都不会变化，其实 <code>diff</code> 算法最耗时的就是这些，如果按现在这种思路的话，就只需要比较变化的部分，这样就会简单很多。</p>
+<p><img src="https://imgchr.com/i/tny2w9" alt="Alt text"></p>
+<p>动态的节点结构出现变化，只会出现在 <code>v-if、v-for</code> 这样的解构性指令之下，所以我们以结构性指令为边界，将整个模板切分成一个一个的内部是静态的块以减少无谓的遍历。</p>
+<p>在 <code>Vue 3.0</code> 中，对 <code>Vitrual DOM</code> 用<code>TypeScript</code> 进行了完全的重构，在很多细节的地方更下功夫、更抠一些性能，同时也结合模板编译来提高运行时性能。从重构得到的表现来看，在大多数情况下，初始渲染更新的提速最高可以翻倍。</p>
+
+        <h3 id="2-更多编译时优化-以减少运行时开销"   >
+          <a href="#2-更多编译时优化-以减少运行时开销" class="heading-link"><i class="fas fa-link"></i></a>2. 更多编译时优化 以减少运行时开销</h3>
+      
+        <h4 id="Component-Fast-Path-Monomorphic-calls-Children-type-detection"   >
+          <a href="#Component-Fast-Path-Monomorphic-calls-Children-type-detection" class="heading-link"><i class="fas fa-link"></i></a>Component Fast Path + Monomorphic calls + Children type detection</h4>
+      <!-- ### 图片 Images -->
+<p><img   src="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-06.jpg?v=1552744290" style=""  alt="Alt text"></p>
+<p>首先举一个简单的例子，当我们将模板编译为 <code>Vitrual DOM</code> 渲染的时候，现在 <code>Vue 2.x</code> 的行为是不管原生组件，还是浏览器自带的 <code>HTML</code> 元素，都统一作为一个字符串，然后传到 <code>h</code> 函数里，也就是创建一个虚拟 <code>node</code> 到一个函数里面。判断一个元素到底是组件还是原生元素的时候，其实是在运行的时候来做。这里面就不可避免的，每个元素都要先检查一遍它是原生还是组件，这样就有一定的运行时开销，实际上这个开销，可以通过编译时来判断。</p>
+<p>如果它一定是一个 <code>HTML</code> 原生元素的话，在运行时就直接生成原生元素对应的 <code>Vitrual DOM</code> 的代码；同样的，如果知道它一定是一个组件，那就直接生成组件的代码，这就是所谓的<code>Component Fast Path</code>。然后就是要尽可能的生成 <code>Monomorphic calls</code>, 就是在生成这些虚拟 <code>Node</code> 的时候，函数调用要尽可能的形状一致，也就是它有同样个数的参数，这样的话会使得我们生成代码，更易于被JS引擎去优化。</p>
+<p>最后还可以做的是在模板中直接静态的分析一个元素所包含的子元素的类型。比如说这边这个 <code>div</code> ,这个 <code>div</code> 包含了一个 <code>span</code> 节点，那么就可以在生成的代码里面，给运行时留下一些类似于 <code>hint</code>，也就是一些「提示」，比如说留下一个数字告诉这个 <code>div</code> 它现在就只有一个子元素，这样就可以直接跳入对应只有一个子元素的分支，从而跳过很多其他不必要的判断。这些小的优化积少成多，就可以在整个应用中得到相当可观的收益。</p>
+
+        <h4 id="优化-Slots-生成"   >
+          <a href="#优化-Slots-生成" class="heading-link"><i class="fas fa-link"></i></a>优化 Slots 生成</h4>
+      <p><img   src="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-07.jpg?v=1552744290" style=""  alt="Alt text"><br>另一点就是优化 <code>Slots</code> 的生成，我们知道在<code>Vue</code>中，当你把<code>slot</code>的内容，传到子组件里的时候，每次更新都会进行一些不必要的渲染。举例来说，左边把这个 <code>hello</code> 作为一个动态的值传到了子组件里面，每次这个 <code>hello</code> 变动的时候，其实首先要更新父组件，父组件更新的同时生成新的 <code>slot</code> 内容传到子组件，然后子组件更新，所以这就是父子关联更新。也就说为了更新这一个 <code>hello</code>，其实触发了两个组件更新，在新的生成机制里面，把所有的 <code>slot</code> 都跟 <code>scope slot</code> 一样统一生成为一个函数，这个函数其实是一个 <code>lazy</code> 的函数，当你把函数传给子组件之后，由子组件来决定什么时候调用这个函数，当子组件调用函数的时候，这里面 <code>hello</code> 的依赖，就成了子组件的而不是父组件的，那么当 <code>hello</code> 变动的时候，就只需要重新渲染子组件，父组件跟子组件的依赖就彻底的分开了。这样在整个应用中，就会得到一个非常精确的组件级的依赖收集，可以进一步的避免不必要的组件渲染。这一点及时解决之后，<code>Vue</code>的组件更新检测就已经基本上可以说是完全精确的。也就是说任何时候，只有真正依赖了某个数据的组件，才可能会重渲染，就不存在需要手动优化组件过度重绘这个问题。</p>
+
+        <h4 id="静态内容提取"   >
+          <a href="#静态内容提取" class="heading-link"><i class="fas fa-link"></i></a>静态内容提取</h4>
+      <p><img   src="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-08.jpg?v=1552744290" style=""  alt="Alt text"><br>静态内容提取在 <code>Vue 2</code> 里其实已经有做了，也就是检测到一部分的模板的不会变的，直接可以把它提取出来，那么在之后的更新中，这一部分模板不仅可以直接复用之前的 <code>Vitrual DOM</code>，连比对过程都可以直接整个树就直接跳过。</p>
+
+        <h4 id="静态属性提取"   >
+          <a href="#静态属性提取" class="heading-link"><i class="fas fa-link"></i></a>静态属性提取</h4>
+      <p><img   src="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-09.jpg?v=1552744290" style=""  alt="Alt text"><br><code>Vue 2</code>里面没有做的一点是，当一个元素它内部任意深度包含任意动态内容的时候，那整个元素都无法被静态化，这就很可惜。但其实还是可以做一定程度的优化，那就是如果这个元素本身上面所有的属性都是静态的，我们可以把这个属性对象给它提取出来，提取之后我们每次比对这个元素的时候，发现这个元素它的所有的 <code>data</code> 都是一样的，那这个元素本身就不需要再比对了，我们只需要去直接跳过它，去比对它的<code>children</code> 就可以了。</p>
+
+        <h4 id="内联事件函数提取"   >
+          <a href="#内联事件函数提取" class="heading-link"><i class="fas fa-link"></i></a>内联事件函数提取</h4>
+      <p><img   src="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-10.jpg?v=1552744290" style=""  alt="Alt text"><br>还有内联事件函数提取。举例来说，左边这样的写法其实会生成一个内联的函数，也就是每次你重新渲染的时候，都会生成一个新的函数。由于这个之后新生成的函数，跟之前生成的函数是不一样的两个函数。虽然它们做的事情一样，但是对 <code>Javascript</code> 来说它没有办法区分，所以为了安全起见，会导致这个子组件每次都会重渲染。那么通过一定程度的优化，就是把它生成一次之后，就把它给 <code>cache</code>，之后每一次都重用同一个函数，我们就可以起到避免子组件无谓更新的一个效果。</p>
+
+        <h2 id="基于-Proxy-的新数据监听系统"   >
+          <a href="#基于-Proxy-的新数据监听系统" class="heading-link"><i class="fas fa-link"></i></a>基于 Proxy 的新数据监听系统</h2>
+      <p>上面的都是跟模板编译相关的内容，<code>Vitrual DOM runtime</code> 性能方面的优化，另一块就是数据监听系统。关于数据监听系统，我们知道现在 <code>Vue 2</code> 用的是基于 <code>ES5</code> 的 <code>getter/setter</code>，也就是 <code>Object.defineProperty</code> 这个<code>API</code>。<code>Vue 3</code> 里面会基于<code>proxy</code> 实现新的数据系统，做一个全新的数据监听系统，实现全语言特性支持，同时还有更好的性能。全语言特性支持意味着，对对象的新属性的增加，删除，数组的 <code>index</code> 和 <code>length</code> 修改，以及<code>Map，Set，WeakMap，WeakSet</code>这些内容，全部都可以完美支持，同时在应用初始化时候侦听大规模数据的时候，性能也会得到提升。事实上这个基于 <code>Proxy</code> 的监听，是所谓的 <code>Lazy by default</code>，就是只有当一个数据被用到的时候，我们才会监听它。如果你有一个非常庞大的数据，但是你只用了其中一小部分，那其实只会监听其中的一小部分，这也是另一个方面的一个性能优化。</p>
+
+        <h4 id="利用-Proxy-减少组件实例初始化开销"   >
+          <a href="#利用-Proxy-减少组件实例初始化开销" class="heading-link"><i class="fas fa-link"></i></a>利用 Proxy 减少组件实例初始化开销</h4>
+      <p>每个 <code>Vue</code> 组件，都会代理它所包含的所有的<code>data，computed，以及props</code>，这些代理都是通过 <code>Object.defineProperty</code> 来实现的。在实际的这个实例生成中，其实大量的 <code>Object.defineProperty</code> 是一个相对昂贵的一个操作。那么在 <code>Vue 3</code> 里面，直接暴露给用户的这个 <code>this</code>，其实是一个真正的组件实例的一个 <code>Proxy</code>，当你是在这个 <code>Proxy</code>上获取一些属性的时候，内部再做判断，这样就彻底避免了 <code>Object.defineProperty</code> 使用。实测下来也是对组件实例化、初始化，实例的初始化带来了很高的性能提升，所以实例初始化也快了将近一倍。</p>
+
+        <h4 id="速度加倍-内存占用减半"   >
+          <a href="#速度加倍-内存占用减半" class="heading-link"><i class="fas fa-link"></i></a>速度加倍 内存占用减半</h4>
+      <p><img   src="https://slide.cdn.myslide.cn/FveB-UrbyzXsJWfHfEFXgScH53TL/slide-15.jpg?v=1552744290" style=""  alt=""><br>这边两张截图，这里是渲染了3000个带状态的组件实例，然后左边是<code>Vue 2.5</code>的数据，消耗了差不多280多毫秒的时间，这个是纯粹的 <code>Javascript</code> 计算时间；而 3.0 目前的这个 <code>Prototype</code>，跑出来的数据是126，也就是连一半都不到，同时内存占用也是一半不到。</p>
+
+        <h4 id="便于-Tree-shaking-的代码结构"   >
+          <a href="#便于-Tree-shaking-的代码结构" class="heading-link"><i class="fas fa-link"></i></a>便于 Tree-shaking 的代码结构</h4>
+      <p>除了性能本身之外，还希望Vue本身的 <code>runtime</code> 可以变的更小，现在其实也不大，20多KB，但是还可以更小。为了做到更小，最重要的一点就是整个代码结构，可以和 <code>Tree-shaking</code> 配合起来，<code>Tree-shaking</code> 就是把我们没有用到的代码，在最后编译的时候给它扔掉。</p>
+<p>之前的 <code>Vue</code> 整个代码只有一个 <code>Vue</code> 对象进来，所有的东西都在 <code>Vue</code> 上，这样的话其实所有你没用到的东西，也没有办法扔掉，因为它们全都已经被增添到 <code>Vue</code> 这个全局对象上了。<code>Vue 3</code>的话，一些不是每个应用都需要的功能，就做成了按需引入，用 <code>ES module import</code> 按需引入。举例来说，内置组件像 <code>keep-alive，transition</code>；指令的配合运行时，比如说<code>v-model，v-for</code>，需要一些 <code>hepler</code> 的函数；各种的工具函数，比如说创建一个<code>async component</code>，使用<code>mixins</code>，或者是<code>memoize</code>，这是一个新的内部的工具函数。很多这些工具函数，都可以做成按需引入的。</p>
+<p>同时像很多这些指令的运行时，在编译的时候，就可以生成对应的代码，也就是只有当你使用<code>v-model</code>的时候，生成的代码才会去<code>import v-model</code>相关的代码。这就保证了，当你只用最最最基本的功能的时候，你就只会用到最核心的，任何 <code>Vue</code> 应用都会用到的那一部分代码。那这一部分代码大小是多少呢？<br>这一部分代码在所有无关的东西都 <code>Tree-shaking</code> 掉之后，现在可以做到是大概在10KB左右。<br>换句话说就是在之前所提到这个速度加倍内存减半的同时，尺寸也可以减半。</p>
+
+        <h2 id="Flow-gt-TypeScript"   >
+          <a href="#Flow-gt-TypeScript" class="heading-link"><i class="fas fa-link"></i></a>Flow -&gt; TypeScript</h2>
+      <p>Vue 3.0的代码从 <code>Flow</code> 迁移到 <code>Typescript</code>，是用 TS 完全重写了。</p>
+
+        <h4 id="Class-API"   >
+          <a href="#Class-API" class="heading-link"><i class="fas fa-link"></i></a>Class API</h4>
+      <p>已经被撤销</p>
+
+        <h4 id="Composition-API"   >
+          <a href="#Composition-API" class="heading-link"><i class="fas fa-link"></i></a>Composition API</h4>
+      <p><strong>组件 API 设计所面对的核心问题之一就是如何组织逻辑，以及如何在多个组件之间抽取和复用逻辑。</strong></p>
+<p><code>vue 2</code>中的这些模式包括：</p>
+<ul>
+<li>Mixins </li>
+<li>高阶组件(Higher-order Components, aka HOCs)</li>
+<li>基于作用域插槽封装逻辑组件</li>
+</ul>
+<p>但是这些模式存在一些问题，比如：</p>
+<ul>
+<li>模板中的数据源不清晰。举例来说，当一个组件中使用了多个 mixin 的时候，光看模板会很难分清一个属性<br>到底是来自哪个 mixin 。HOC 也有类似的问题。</li>
+<li>命名空间冲突。由不同的开发者的 mixin 无法保证不会正好用到一样的属性或是方法名。HOC 在注入的 props<br>中也存在类型问题。</li>
+<li>性能。高阶组件 和 作用域插槽都需要额外的组件实例嵌套来封装逻辑，导致无谓的性能开销。</li>
+</ul>
+<p><code>Composition API</code> 受 <code>React Hooks</code> 的启发，提供了一个全新的逻辑复用方案，使用基于函数的 API，<br>将相关代码抽取到一个 <code>composition function</code>（组合函数）中，该函数封装了相关的逻辑，并将需要暴露<br>给组件的状态以响应式的数据源方式返回出来。</p>
+<p><strong>类型推导</strong></p>
+<p>3.0 的一个主要设计目标是增强对 <code>TypeScript</code> 的支持。原本是想通过 <code>Class API</code> 来达成这个目标，但<br>经过讨论和原型开发，并不是解决这个问题的正确路线。</p>
+<p>基于函数的 API 天然对类型推导很友好，因为 TS 对函数的参数、返回值和泛型的支持已经非常完备。</p>
+<p><strong>打包尺寸</strong></p>
+<p>基于函数的 API 每一个函数都可以作为 named ES export 被单独引入，这使得它们对 tree-shaking 非常友<br>好。没有被使用的 API 的相关代码可以在最终打包时被移除。同时，基于函数 API 所写的代码也有更好的压缩效<br>率，因为所有的函数名和 setup 函数体内部的变量名都可以被压缩，但对象和 class 的属性/方法名却不可以。</p>
+<p><strong>设计API</strong></p>
+<ul>
+<li>setup</li>
+<li>reactive</li>
+<li>ref</li>
+<li>isRef</li>
+<li>toRefs</li>
+<li>computed</li>
+<li>…</li>
+<li><span class="exturl"><a class="exturl__link"   href="https://github.com/vuejs/composition-api"  target="_blank" rel="noopener">官方文档</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   href="https://zhuanlan.zhihu.com/p/68477600"  target="_blank" rel="noopener">尤雨溪</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+<li><span class="exturl"><a class="exturl__link"   href="http://www.liulongbin.top:8085"  target="_blank" rel="noopener">个人博客</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span></li>
+</ul>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">const App &#x3D; &#123;</span><br><span class="line">  setup() &#123;</span><br><span class="line">    &#x2F;&#x2F; data </span><br><span class="line">    const count &#x3D; ref(0)</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; computed</span><br><span class="line">    const plusOne &#x3D; computed(() &#x3D;&gt; count.value + 1)</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; method</span><br><span class="line">    const increment &#x3D; () &#x3D;&gt; &#123; count.value++ &#125;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; watch</span><br><span class="line">    watch(() &#x3D;&gt; count.value * 2, v &#x3D;&gt; console.log(v))</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; lifecycle</span><br><span class="line">    onMounted(() &#x3D;&gt; console.log(&#39;mounted!&#39;))</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; 暴露给模板或渲染函数</span><br><span class="line">    return &#123; count &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p>对比 <code>Class API</code> 有</p>
+<figure class="highlight plain"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">更好的 &#96;TypeScript&#96; 类型推导支持</span><br><span class="line">更灵活的逻辑复用能力</span><br><span class="line">Tree-shaking 友好</span><br><span class="line">代码更容易被压缩</span><br></pre></td></tr></table></div></figure></div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="http://yoursite.com">Christine Yin</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="http://yoursite.com/2020/05/30/vue-3-0-4/">http://yoursite.com/2020/05/30/vue-3-0-4/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="http://yoursite.com/tags/Vue3-0/">Vue3.0</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2020/05/31/browser-v8/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">V8 如何执行一段 JS 代码？</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2020/05/29/algorithm-string-1/"><span class="paginator-prev__text">数据结构和算法 - 字符串</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#更快"><span class="toc-number">1.</span> <span class="toc-text">
+          更快</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Vitrual-DOM-重构"><span class="toc-number">1.1.</span> <span class="toc-text">
+          1. Vitrual DOM 重构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-更多编译时优化-以减少运行时开销"><span class="toc-number">1.2.</span> <span class="toc-text">
+          2. 更多编译时优化 以减少运行时开销</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Component-Fast-Path-Monomorphic-calls-Children-type-detection"><span class="toc-number">1.2.1.</span> <span class="toc-text">
+          Component Fast Path + Monomorphic calls + Children type detection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#优化-Slots-生成"><span class="toc-number">1.2.2.</span> <span class="toc-text">
+          优化 Slots 生成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#静态内容提取"><span class="toc-number">1.2.3.</span> <span class="toc-text">
+          静态内容提取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#静态属性提取"><span class="toc-number">1.2.4.</span> <span class="toc-text">
+          静态属性提取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#内联事件函数提取"><span class="toc-number">1.2.5.</span> <span class="toc-text">
+          内联事件函数提取</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基于-Proxy-的新数据监听系统"><span class="toc-number">2.</span> <span class="toc-text">
+          基于 Proxy 的新数据监听系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#利用-Proxy-减少组件实例初始化开销"><span class="toc-number">2.0.1.</span> <span class="toc-text">
+          利用 Proxy 减少组件实例初始化开销</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#速度加倍-内存占用减半"><span class="toc-number">2.0.2.</span> <span class="toc-text">
+          速度加倍 内存占用减半</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#便于-Tree-shaking-的代码结构"><span class="toc-number">2.0.3.</span> <span class="toc-text">
+          便于 Tree-shaking 的代码结构</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Flow-gt-TypeScript"><span class="toc-number">3.</span> <span class="toc-text">
+          Flow -&gt; TypeScript</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Class-API"><span class="toc-number">3.0.1.</span> <span class="toc-text">
+          Class API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Composition-API"><span class="toc-number">3.0.2.</span> <span class="toc-text">
+          Composition API</span></a></li></ol></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="http://www.zhideedu.com/UploadFiles/img_3_3865507487_3939955310_26.jpg" alt="avatar"></div><p class="sidebar-ov-author__text">Write code and Love life</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://weibo.com/" target="_blank" rel="noopener" data-popover="微博" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weibo"></i></span></a><a class="sidebar-ov-social-item" href="yournumber" target="_blank" rel="noopener" data-popover="微信" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-weixin"></i></span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">45</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">17</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">56</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2021</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>Christine Yin</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v4.2.1</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.0.1</span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script src="https://cdn.jsdelivr.net/npm/ribbon.js@latest/dist/ribbon.min.js" size="200" alpha="0.6" zIndex="-1"></script><script src="/js/utils.js?v=2.0.1"></script><script src="/js/stun-boot.js?v=2.0.1"></script><script src="/js/scroll.js?v=2.0.1"></script><script src="/js/header.js?v=2.0.1"></script><script src="/js/sidebar.js?v=2.0.1"></script></body></html>
